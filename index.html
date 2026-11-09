@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TecnoEcuador Store | Catálogo & Pedidos Directos</title>
+    <style>
+        :root {
+            --primary-navy: #0F2C59;
+            --primary-cyan: #00A8CC;
+            --dark-slate: #1E293B;
+            --light-bg: #F8FAFC;
+            --white: #FFFFFF;
+            --border-color: #E2E8F0;
+            --whatsapp-green: #25D366;
+            --whatsapp-hover: #1EBE5D;
+            --accent-gold: #F59E0B;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Inter, Roboto, Helvetica, Arial, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--light-bg);
+            color: var(--dark-slate);
+            display: flex;
+            justify-content: center;
+            padding-bottom: 40px;
+        }
+
+        .app-container {
+            width: 100%;
+            max-width: 480px;
+            background-color: var(--white);
+            min-height: 100vh;
+            box-shadow: 0 10px 30px rgba(15, 44, 89, 0.08);
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header Corporativo */
+        .header {
+            background: linear-gradient(135deg, var(--primary-navy) 0%, #153B75 100%);
+            color: var(--white);
+            padding: 24px 20px 20px;
+            text-align: center;
+            border-bottom-left-radius: 20px;
+            border-bottom-right-radius: 20px;
+            box-shadow: 0 4px 15px rgba(15, 44, 89, 0.15);
+        }
+
+        .header h1 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            letter-spacing: -0.3px;
+            margin-bottom: 4px;
+        }
+
+        .header p {
+            font-size: 0.85rem;
+            color: var(--primary-cyan);
+            font-weight: 500;
+        }
+
+        .trust-banner {
+            display: flex;
+            justify-content: space-around;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 8px 4px;
+            margin-top: 14px;
+            font-size: 0.75rem;
+        }
+
+        .trust-banner span {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        /* Secciones del Formulario */
+        .section-title {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--primary-navy);
+            margin: 20px 20px 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Catálogo de Productos */
+        .catalog {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            padding: 0 20px;
+        }
+
+        .product-card {
+            border: 1.5px solid var(--border-color);
+            border-radius: 14px;
+            padding: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background-color: var(--white);
+            transition: all 0.2s ease;
+        }
+
+        .product-card.selected {
+            border-color: var(--primary-cyan);
+            box-shadow: 0 4px 12px rgba(0, 168, 204, 0.12);
+            background-color: #F0F9FF;
+        }
+
+        .product-icon {
+            font-size: 2rem;
+            width: 50px;
+            height: 50px;
+            background-color: var(--light-bg);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .product-info {
+            flex-grow: 1;
+        }
+
+        .product-title {
+            font-size: 0.92rem;
+            font-weight: 700;
+            color: var(--dark-slate);
+        }
+
+        .product-desc {
+            font-size: 0.75rem;
+            color: #64748B;
+            margin-top: 2px;
+            line-height: 1.2;
+        }
+
+        .product-price {
+            font-size: 0.95rem;
+            font-weight: 800;
+            color: var(--primary-navy);
+            margin-top: 4px;
+        }
+
+        /* Controles de Cantidad (+/-) */
+        .qty-controls {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background-color: var(--light-bg);
+            border-radius: 8px;
+            padding: 4px;
+            border: 1px solid var(--border-color);
+        }
+
+        .qty-btn {
+            width: 32px;
+            height: 32px;
+            border: none;
+            background-color: var(--white);
+            color: var(--primary-navy);
+            border-radius: 6px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.1s active;
+        }
+
+        .qty-btn:active {
+            transform: scale(0.92);
+        }
+
+        .qty-val {
+            font-size: 0.9rem;
+            font-weight: 700;
+            width: 20px;
+            text-align: center;
+        }
+
+        /* Selector de Envío */
+        .shipping-options {
+            padding: 0 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .shipping-card {
+            border: 1.5px solid var(--border-color);
+            border-radius: 12px;
+            padding: 12px 14px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .shipping-card.selected {
+            border-color: var(--primary-cyan);
+            background-color: #F0F9FF;
+        }
+
+        .shipping-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.88rem;
+            font-weight: 600;
+        }
+
+        .shipping-price {
+            font-weight: 700;
+            color: var(--primary-navy);
+            font-size: 0.88rem;
+        }
+
+        /* Formulario del Cliente */
+        .customer-form {
+            padding: 0 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .input-group label {
+            display: block;
+            font-size: 0.78rem;
+            font-weight: 700;
+            color: var(--primary-navy);
+            margin-bottom: 4px;
+        }
+
+        .input-group input, .input-group select {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1.5px solid var(--border-color);
+            border-radius: 10px;
+            font-size: 0.9rem;
+            color: var(--dark-slate);
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .input-group input:focus, .input-group select:focus {
+            border-color: var(--primary-cyan);
+        }
+
+        /* Resumen de Orden en Tiempo Real */
+        .order-summary {
+            margin: 20px;
+            background-color: var(--light-bg);
+            border-radius: 14px;
+            padding: 16px;
+            border: 1px dashed var(--primary-cyan);
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            color: #475569;
+            margin-bottom: 6px;
+        }
+
+        .summary-total {
+            display: flex;
+            justify-content: space-between;
+            font-size: 1.15rem;
+            font-weight: 800;
+            color: var(--primary-navy);
+            margin-top: 10px;
+            padding-top: 8px;
+            border-top: 2px dashed var(--border-color);
+        }
+
+        /* Botones de Acción Comercial (CRO) */
+        .action-buttons {
+            padding: 0 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .btn-whatsapp {
+            width: 100%;
+            min-height: 52px;
+            background-color: var(--whatsapp-green);
+            color: var(--white);
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3);
+            transition: all 0.2s;
+        }
+
+        .btn-whatsapp:active {
+            transform: scale(0.98);
+            background-color: var(--whatsapp-hover);
+        }
+
+        .btn-copy {
+            width: 100%;
+            min-height: 44px;
+            background-color: var(--light-bg);
+            color: var(--primary-navy);
+            border: 1.5px solid var(--border-color);
+            border-radius: 10px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        /* Badges de Confianza y Testimonios */
+        .trust-footer {
+            margin: 24px 20px 10px;
+            padding-top: 16px;
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+        }
+
+        .rating-box {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            font-size: 0.82rem;
+            font-weight: 700;
+            color: var(--primary-navy);
+            margin-bottom: 12px;
+        }
+
+        .stars {
+            color: var(--accent-gold);
+        }
+
+        .guarantees {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 8px;
+            font-size: 0.7rem;
+            color: #64748B;
+        }
+
+        .guarantee-item {
+            background-color: var(--light-bg);
+            padding: 8px 4px;
+            border-radius: 8px;
+        }
+
+        .toast-msg {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: var(--primary-navy);
+            color: var(--white);
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            display: none;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            z-index: 100;
+        }
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+    <!-- Header -->
+    <header class="header">
+        <h1>TecnoEcuador Store 💻</h1>
+        <p>Laptops, PCs & Impresoras con Garantía Oficial</p>
+        <div class="trust-banner">
+            <span>🔒 Factura & IVA</span>
+            <span>🚀 Envíos Courier</span>
+            <span>⭐ 500+ Clientes</span>
+        </div>
+    </header>
+
+    <!-- 1. Catálogo de Productos -->
+    <h2 class="section-title"><span>1️⃣</span> Selecciona tus Equipos</h2>
+    <div class="catalog" id="catalogContainer">
+        <!-- Renderizado dinámico desde JS -->
+    </div>
+
+    <!-- 2. Canal de Entrega -->
+    <h2 class="section-title"><span>2️⃣</span> Método de Entrega</h2>
+    <div class="shipping-options" id="shippingContainer">
+        <div class="shipping-card selected" onclick="selectShipping('tienda', 0.00)">
+            <div class="shipping-left">
+                <input type="radio" name="shipping" checked>
+                <span>🏢 Retiro en Punto / Tienda</span>
+            </div>
+            <span class="shipping-price">GRATIS</span>
+        </div>
+        <div class="shipping-card" onclick="selectShipping('courier', 5.00)">
+            <div class="shipping-left">
+                <input type="radio" name="shipping">
+                <span>🚚 Envío Seguro Courier / Servientrega</span>
+            </div>
+            <span class="shipping-price">+$5.00 USD</span>
+        </div>
+    </div>
+
+    <!-- 3. Datos del Cliente -->
+    <h2 class="section-title"><span>3️⃣</span> Datos para el Envío / Factura</h2>
+    <div class="customer-form">
+        <div class="input-group">
+            <label for="custName">Nombre Completo *</label>
+            <input type="text" id="custName" placeholder="Ej: Juan Pérez" oninput="calculateTotal()">
+        </div>
+        <div class="input-group">
+            <label for="custCity">Ciudad / Provincia *</label>
+            <input type="text" id="custCity" placeholder="Ej: Quito, Guayaquil, Cuenca..." oninput="calculateTotal()">
+        </div>
+        <div class="input-group">
+            <label for="custAddress">Dirección o Sector *</label>
+            <input type="text" id="custAddress" placeholder="Ej: Av. Amazonas y República" oninput="calculateTotal()">
+        </div>
+        <div class="input-group">
+            <label for="payMethod">Forma de Pago Preferida</label>
+            <select id="payMethod" onchange="calculateTotal()">
+                <option value="Transferencia / Depósito">Transferencia Bancaria / Depósito</option>
+                <option value="Tarjeta de Crédito / PayPhone">Tarjeta de Crédito / Débito (PayPhone)</option>
+                <option value="Efectivo en Contraentrega">Efectivo (Solo retiro en tienda)</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- 4. Resumen de Orden en Tiempo Real -->
+    <div class="order-summary">
+        <div class="summary-row">
+            <span>Subtotal Equipos:</span>
+            <span id="sumSubtotal">$0.00 USD</span>
+        </div>
+        <div class="summary-row">
+            <span>Costo de Envío:</span>
+            <span id="sumShipping">GRATIS</span>
+        </div>
+        <div class="summary-total">
+            <span>TOTAL PROYECTADO:</span>
+            <span id="sumTotal">$0.00 USD</span>
+        </div>
+    </div>
+
+    <!-- 5. Botones de Acción Directa -->
+    <div class="action-buttons">
+        <button class="btn-whatsapp" onclick="sendWhatsAppOrder()">
+            <span>📲 Confirmar y Enviar Pedido por WhatsApp</span>
+        </button>
+        <button class="btn-copy" onclick="copyOrderText()">
+            📋 Copiar resumen para el portapapeles
+        </button>
+    </div>
+
+    <!-- 6. Trust Badges y Garantías -->
+    <footer class="trust-footer">
+        <div class="rating-box">
+            <span class="stars">★★★★★</span>
+            <span>4.9/5 estrellas por 500+ estudiantes & Pymes</span>
+        </div>
+        <div class="guarantees">
+            <div class="guarantee-item">
+                <strong>🛡️ 1 Año Garantía</strong><br>Soporte local
+            </div>
+            <div class="guarantee-item">
+                <strong>📦 Empaque 100%</strong><br>Seguro contra golpes
+            </div>
+            <div class="guarantee-item">
+                <strong>📄 Factura Legal</strong><br>Con IVA incluido
+            </div>
+        </div>
+    </footer>
+</div>
+
+<div class="toast-msg" id="toast">¡Resumen copiado al portapapeles!</div>
+
+<script>
+    // BASE DE DATOS LOCAL DE PRODUCTOS
+    const products = [
+        {
+            id: 1,
+            title: "Laptop Dell Inspiron 15 (Estudiantil)",
+            desc: "Intel Core i3 | 8GB RAM | SSD 256GB NVMe",
+            price: 440.00,
+            icon: "💻"
+        },
+        {
+            id: 2,
+            title: "Laptop HP Pavilion 15 (Gama Media)",
+            desc: "Intel Core i5 | 16GB RAM | SSD 512GB NVMe",
+            price: 680.00,
+            icon: "🚀"
+        },
+        {
+            id: 3,
+            title: "Impresora Epson EcoTank L3250 Wi-Fi",
+            desc: "Tanque continuo | Escáner | Imprime desde celular",
+            price: 230.00,
+            icon: "🖨️"
+        },
+        {
+            id: 4,
+            title: "Combo Académico (HP i5 + Epson L3250)",
+            desc: "Laptop + Impresora + Mochila de regalo",
+            price: 850.00,
+            icon: "🎒"
+        }
+    ];
+
+    // ESTADO DE LA APLICACIÓN
+    let cart = {};
+    let currentShippingCost = 0.00;
+    let currentShippingName = "Retiro en Punto / Tienda";
+
+    // INICIALIZACIÓN
+    window.onload = () => {
+        renderCatalog();
+        calculateTotal();
+    };
+
+    function renderCatalog() {
+        const container = document.getElementById('catalogContainer');
+        container.innerHTML = products.map(prod => `
+            <div class="product-card ${cart[prod.id] ? 'selected' : ''}" id="card-${prod.id}">
+                <div class="product-icon">${prod.icon}</div>
+                <div class="product-info">
+                    <div class="product-title">${prod.title}</div>
+                    <div class="product-desc">${prod.desc}</div>
+                    <div class="product-price">$${prod.price.toFixed(2)} USD</div>
+                </div>
+                <div class="qty-controls">
+                    <button class="qty-btn" onclick="updateQty(${prod.id}, -1)">-</button>
+                    <span class="qty-val" id="qty-${prod.id}">${cart[prod.id] || 0}</span>
+                    <button class="qty-btn" onclick="updateQty(${prod.id}, 1)">+</button>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    function updateQty(productId, change) {
+        const currentQty = cart[productId] || 0;
+        const newQty = Math.max(0, currentQty + change);
+        
+        if (newQty === 0) {
+            delete cart[productId];
+        } else {
+            cart[productId] = newQty;
+        }
+
+        document.getElementById(`qty-${productId}`).innerText = newQty;
+        const card = document.getElementById(`card-${productId}`);
+        if (newQty > 0) {
+            card.classList.add('selected');
+        } else {
+            card.classList.remove('selected');
+        }
+
+        calculateTotal();
+    }
+
+    function selectShipping(type, cost) {
+        currentShippingCost = cost;
+        currentShippingName = type === 'tienda' ? "Retiro en Punto / Tienda" : "Envío Courier / Servientrega";
+        
+        const cards = document.querySelectorAll('.shipping-card');
+        cards.forEach((c, idx) => {
